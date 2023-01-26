@@ -6,8 +6,6 @@ import { PhonebookForm as Form, Input, Label, Error } from './Form.styled';
 import Box from 'components/shared/Box';
 import Button from 'components/shared/Button';
 import theme from 'theme';
-import { array } from 'prop-types';
-import { boolean } from 'yup/lib/locale';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -43,7 +41,7 @@ const AddContactForm = ({ onAddContact }) => {
           if (lastName) {
             return firstName.trim() + ' ' + lastName.trim();
           }
-          return firstName;
+          return firstName.trim();
         };
 
         const contact = {
@@ -103,7 +101,6 @@ const AddContactForm = ({ onAddContact }) => {
           disabled={false}
           children="Add contact"
           iconSize={20}
-          //   onClick=""
         ></Button>
       </Form>
     </Formik>

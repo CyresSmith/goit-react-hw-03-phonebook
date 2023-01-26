@@ -13,6 +13,20 @@ class Phonebook extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const myContacts = JSON.parse(localStorage.getItem('myContacts'));
+    this.setState({ contacts: myContacts });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { state } = this;
+    const { contacts } = this.state;
+
+    if (prevState !== state) {
+      localStorage.setItem('myContacts', JSON.stringify(contacts));
+    }
+  }
+
   addContact = contact => {
     const { contacts } = this.state;
     const normalizedName = contact.name.toLowerCase();
@@ -27,7 +41,7 @@ class Phonebook extends Component {
       });
     } else {
       this.setState(({ contacts }) => {
-        return contacts.push(contact);
+        return { contacts: [...contacts, contact] };
       });
     }
   };
@@ -42,26 +56,26 @@ class Phonebook extends Component {
     }));
   };
 
+  filteredContacts = (value, contacts) => {
+    if (value) {
+      const filteredContacts = contacts.filter(({ name }) =>
+        name.toLowerCase().includes(value)
+      );
+      if (filteredContacts.length === 0) {
+        Notify.failure('No contacts with this name', {
+          showOnlyTheLastOne: true,
+          position: 'right-bottom',
+        });
+      } else {
+        return filteredContacts;
+      }
+    }
+    return contacts;
+  };
+
   render() {
     const { contacts, filter } = this.state;
-    const { addContact, changeFilter, removeContact } = this;
-
-    const filteredContacts = (value, contacts) => {
-      if (value) {
-        const filteredContacts = contacts.filter(({ name }) =>
-          name.toLowerCase().includes(value)
-        );
-        if (filteredContacts.length === 0) {
-          Notify.failure('No contacts with this name', {
-            showOnlyTheLastOne: true,
-            position: 'right-bottom',
-          });
-        } else {
-          return filteredContacts;
-        }
-      }
-      return contacts;
-    };
+    const { addContact, changeFilter, removeContact, filteredContacts } = this;
 
     return (
       <>
