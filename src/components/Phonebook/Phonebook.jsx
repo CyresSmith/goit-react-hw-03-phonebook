@@ -15,7 +15,12 @@ class Phonebook extends Component {
 
   componentDidMount() {
     const myContacts = JSON.parse(localStorage.getItem('myContacts'));
-    this.setState({ contacts: myContacts });
+
+    if (myContacts) {
+      return this.setState({ contacts: myContacts });
+    }
+
+    this.setState({ contacts: [] });
   }
 
   componentDidUpdate(prevProps, prevState) {
